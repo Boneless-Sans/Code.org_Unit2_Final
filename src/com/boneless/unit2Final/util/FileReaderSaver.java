@@ -89,7 +89,7 @@ public class FileReaderSaver {
 
         List<String> matchingNames = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName)) ) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             Pattern pattern = Pattern.compile(".*\\b" + Pattern.quote(targetNumber) + "\\b.*");
 
@@ -100,7 +100,11 @@ public class FileReaderSaver {
                     // If the line contains the target number, extract and add the name to the list
                     String[] parts = line.split("-"); // Assuming the name is separated by a hyphen
                     if (parts.length == 2) {
-                        matchingNames.add(parts[0].trim());
+                        String name = parts[0].trim();
+
+                        // Custom logic to remove unwanted characters
+                        name = removeBracketsAndCustomCharacters(name);
+                        matchingNames.add(name);
                     }
                 }
             }
