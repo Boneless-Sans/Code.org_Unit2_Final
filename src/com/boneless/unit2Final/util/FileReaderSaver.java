@@ -103,7 +103,6 @@ public class FileReaderSaver {
                         String name = parts[0].trim();
 
                         // Custom logic to remove unwanted characters
-                        name = removeBracketsAndCustomCharacters(name);
                         matchingNames.add(name);
                     }
                 }
