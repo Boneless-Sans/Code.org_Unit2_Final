@@ -1,6 +1,7 @@
 package com.boneless.unit2Final;
 
 import com.boneless.unit2Final.util.FileReaderSaver;
+import com.boneless.unit2Final.Apple;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,35 +30,37 @@ public class Main extends JFrame {
 //        mainMenu.add(submit);
 //        mainMenu.setVisible(true);
 //    }
-    public static void main(String[] args){
+    public static void main(String[] args) {
         boolean checkLoop = true;
+        String brandChoice;
+        String typeChoice;
 
-        Device customDevice = new Device("Phone","Apple",50);
+        Device customDevice = new Device("Phone", "Apple", 50);
         Scanner scan = new Scanner(System.in);
         System.out.println("What Brand of Deivce Would You Like?");
         System.out.println("Apple(a) " + "Google(g) " + "Samsung(s) + OnePlus(o)");
-        while(checkLoop){
-            String brandChoice = scan.next();
-            if(brandChoice.equalsIgnoreCase("a")){
+        while (checkLoop) {
+            brandChoice = scan.next();
+            if (brandChoice.equalsIgnoreCase("a")) {
+                Apple appleDevice = new Apple();
                 customDevice.setBrand("Apple");
                 checkLoop = false;
-            }else if(brandChoice.equalsIgnoreCase("g")){
+                customDevice.setType(appleDevice.chooseModel());
+            } else if (brandChoice.equalsIgnoreCase("g")) {
                 customDevice.setBrand("Google");
                 checkLoop = false;
-            }else if(brandChoice.equalsIgnoreCase("s")){
+            } else if (brandChoice.equalsIgnoreCase("s")) {
                 customDevice.setBrand("Samsung");
                 checkLoop = false;
-            } else if(brandChoice.equalsIgnoreCase("o")){
+            } else if (brandChoice.equalsIgnoreCase("o")) {
                 customDevice.setBrand("OnePlus");
                 checkLoop = false;
-            }else{
+            } else {
                 System.out.println("Invaild Choice");
                 System.out.println("What Brand of Deivce Would You Like?");
                 System.out.println("Apple(a) " + "Google(g) " + "Samsung(s) + OnePlus(o)");
             }
         }
-        
-
     }
 }
 

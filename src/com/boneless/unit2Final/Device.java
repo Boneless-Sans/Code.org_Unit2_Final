@@ -1,5 +1,7 @@
 package com.boneless.unit2Final;
 
+import java.util.Scanner;
+
 public class Device {
     private String type;
     private String brand;
@@ -33,3 +35,4 @@ public class Device {
         return "Device Type: " + type + "\nBrand: " + brand + "\nPrice: $" + price;
     }
 }
+//debating whether to have static prices, or do some math for prices
