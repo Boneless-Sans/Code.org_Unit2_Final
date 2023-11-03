@@ -29,3 +29,5 @@ public class Main extends JFrame {
         mainMenu.setVisible(true);
     }
 }
+
+//Tech store, phones, tablets, laptops, desktops
