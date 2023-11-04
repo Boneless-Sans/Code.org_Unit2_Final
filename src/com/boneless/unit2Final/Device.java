@@ -31,8 +31,11 @@ public class Device {
     public String getBrand(){return brand;}
     public double getPrice(){return price;}
 
+    public String toFile(){
+        return "Brand: " + brand + " - Device Type: " + type + " - Price: $" + price;
+    }
     public String toString(){
-        return "Device Type: " + type + "\nBrand: " + brand + "\nPrice: $" + price;
+        return "Brand: " + brand + "\nDevice Type: " + type  + "\nPrice: $" + price;
     }
 }
 //debating whether to have static prices, or do some math for prices

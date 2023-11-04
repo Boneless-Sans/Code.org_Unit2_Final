@@ -36,21 +36,48 @@ public class Apple extends Device{
         String typeChoice;
 
         while(checkLoop){
-            System.out.println("What type of Apple device do you want?");
-            System.out.println("iPhone(i) " + "iPad(p) " + "Macbook(m)");
+            System.out.println("What type of Apple device do you want?\niPhone(i) iPad(p) Macbook(m)");
             typeChoice = scan.next();
             if(typeChoice.equalsIgnoreCase("i")){
                 this.setModel("iPhone");
+                this.chooseiPhoneTrim();
                 checkLoop = false;
             }else if(typeChoice.equalsIgnoreCase("p")){
                 this.setModel("iPad");
+                checkLoop = false;
             }else if(typeChoice.equalsIgnoreCase("m")){
                 this.setModel("Macbook");
+                checkLoop = false;
             }else{
-                System.out.println("Invaild Choice");
+                System.out.println("Invalid Choice\n");
             }
         }
         return model;
+    }
+    public void chooseiPhoneTrim(){
+        Scanner scan = new Scanner(System.in);
+        boolean checkLoop = true;
+        String typeChoice;
+
+        while(checkLoop){
+            System.out.println("\nPlease choose type of device\nStandard(s) Standard Plus(z) Pro(p) Pro Max(m)");
+            typeChoice = scan.next();
+            if(typeChoice.equalsIgnoreCase("s")){
+                this.setTrim("Standard");
+                checkLoop = false;
+            }else if(typeChoice.equalsIgnoreCase("z")){
+                this.setTrim("Standard Plus");
+                checkLoop =false;
+            }else if(typeChoice.equalsIgnoreCase("p")){
+                this.setTrim("Pro");
+                checkLoop =false;
+            }else if(typeChoice.equalsIgnoreCase("m")){
+                this.setTrim("Pro Max");
+                checkLoop =false;
+            }else{
+                System.out.println("Invalid Choice\n");
+            }
+        }
     }
 
     public String getModel(){return model;}

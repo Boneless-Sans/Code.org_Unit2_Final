@@ -1,11 +1,6 @@
 package com.boneless.unit2Final.util;
 
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,32 +13,48 @@ public class FileReaderSaver {
             fileName = "src/resource/data/" + fileName;
         }
 
-        File file = new File(fileName);
-        try (BufferedReader reader = new BufferedReader(new FileReader(file));
-             FileWriter writer = new FileWriter(file)) {
+        try (RandomAccessFile file = new RandomAccessFile(fileName, "rw")) {
+            if (lineNumber <= 1) {
+                // If lineNumber is 1 or less, write the updated content and reset the counter
+                file.setLength(0); // Wipe the file
+                file.writeBytes("1\n"); // Set the top line to "1"
+            } else {
+                int currentLine = 0;
+                long position = 0;
 
-            String line;
-            int currentLine = 0;
-            StringBuilder updatedContent = new StringBuilder();
-
-            while ((line = reader.readLine()) != null) {
-                currentLine++;
-                if (currentLine == lineNumber) {
-                    updatedContent.append(data.toString()).append("\n");
-                } else {
-                    updatedContent.append(line).append("\n");
+                while (currentLine < lineNumber - 1) {
+                    // Find the position of the start of the target line
+                    String line = file.readLine();
+                    if (line == null) {
+                        break; // Line number exceeds the number of lines in the file
+                    }
+                    position = file.getFilePointer();
+                    currentLine++;
                 }
+
+                // Move to the position of the target line
+                file.seek(position);
+
+                // Write the updated content
+                file.writeBytes(data.toString() + "\n");
             }
 
-            // If lineNumber is greater than the number of lines in the file, append the data at the end.
-            while (currentLine < lineNumber - 1) {
-                updatedContent.append("\n");
-                currentLine++;
-            }
+            System.out.println("Data saved to " + fileName + " (Line " + lineNumber + ": " + data + ")");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Write the updated content back to the file
-            writer.write(updatedContent.toString());
-            System.out.println("Data saved to " + file.getAbsolutePath() + " (Line " + lineNumber + ": " + data + ")");
+    public static void resetFile(String fileName) {
+        if (fileName.indexOf('/') == -1) {
+            // No directory provided, use the default directory
+            fileName = "src/resource/data/" + fileName;
+        }
+
+        try (RandomAccessFile file = new RandomAccessFile(fileName, "rw")) {
+            file.setLength(0); // Wipe the file
+            file.writeBytes("1\n"); // Set the top line to "1"
+            System.out.println("File " + fileName + " has been reset.");
         } catch (IOException e) {
             e.printStackTrace();
         }

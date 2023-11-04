@@ -23,7 +23,7 @@ public class Main extends JFrame {
 //        submit.setBounds(200,350,110,50);
 //        submit.addActionListener(e -> {
 //            int output = Integer.parseInt(employeeNum.getText());
-//            System.out.println("Welcome, " + FileReaderSaver.extractNamesWithNumber("employees.json", String.valueOf(output)));
+//            System.out.println("Welcome, " + FileReaderSaver.extractNamesWithNumber("employees.sdat", String.valueOf(output)));
 //        });
 //
 //        mainMenu.add(employeeNum);
