@@ -159,7 +159,4 @@ public class Apple extends Device{
     public String toString(){
         return super.toString() + "\nModel: " + model + "\nTrim: " + trim + "\nStorage: " + storage + "GBs";
     }
-    public static void main(String[] args){
-        new Apple();
-    }
 }

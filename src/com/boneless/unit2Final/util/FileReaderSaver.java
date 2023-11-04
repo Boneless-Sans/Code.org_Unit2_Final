@@ -7,43 +7,65 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileReaderSaver {
-    public static void save(Object data, String fileName, int lineNumber) {
+    public static void save(Object data, String fileName) {
         if (fileName.indexOf('/') == -1) {
             // No directory provided, use the default directory
             fileName = "src/resource/data/" + fileName;
         }
 
         try (RandomAccessFile file = new RandomAccessFile(fileName, "rw")) {
-            if (lineNumber <= 1) {
-                // If lineNumber is 1 or less, write the updated content and reset the counter
-                file.setLength(0); // Wipe the file
-                file.writeBytes("1\n"); // Set the top line to "1"
-            } else {
-                int currentLine = 0;
-                long position = 0;
+            String topLine = file.readLine(); // Read the top line
+            int currentLine = 1; // Initialize the line counter
 
-                while (currentLine < lineNumber - 1) {
-                    // Find the position of the start of the target line
-                    String line = file.readLine();
-                    if (line == null) {
-                        break; // Line number exceeds the number of lines in the file
-                    }
-                    position = file.getFilePointer();
-                    currentLine++;
+            if (topLine != null) {
+                try {
+                    currentLine = Integer.parseInt(topLine); // Try to parse the top line as an integer
+                } catch (NumberFormatException e) {
+                    // The top line is not a valid integer, indicating an empty file
+                    currentLine = 1; // Set the line counter to 1 for an empty file
                 }
-
-                // Move to the position of the target line
-                file.seek(position);
-
-                // Write the updated content
-                file.writeBytes(data.toString() + "\n");
             }
 
-            System.out.println("Data saved to " + fileName + " (Line " + lineNumber + ": " + data + ")");
+            long position = 0;
+            boolean fileIsEmpty = true; // Flag to check if the file is empty
+
+            String line;
+            while ((line = file.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    fileIsEmpty = false; // The file is not empty
+                } else {
+                    // Found an empty line, write the data to this line
+                    file.seek(position);
+                    // Format the data with a delimiter to preserve spaces
+                    file.writeBytes(data.toString() + "~~~\n");
+                    System.out.println("Data saved to " + fileName + " (Line " + (position / 4) + ": " + data + ")");
+                    return; // Exit the loop after writing the data
+                }
+                position = file.getFilePointer();
+            }
+
+            if (fileIsEmpty) {
+                // If the file is empty, write the data to the first line
+                file.seek(0);
+                // Format the data with a delimiter to preserve spaces
+                file.writeBytes(data.toString() + "~~~\n");
+                System.out.println("Data saved to " + fileName + " (Line 1: " + data + ")");
+            } else {
+                // If no empty line is found, append the data to the end of the file
+                file.seek(file.length());
+                // Format the data with a delimiter to preserve spaces
+                file.writeBytes(data.toString() + "~~~\n");
+                System.out.println("Data saved to " + fileName + " (Line " + (file.length() / 4) + ": " + data + ")");
+            }
+
+            // Increment the line number at the top line for the next entry
+            file.seek(0);
+            file.writeBytes(String.valueOf(currentLine + 1) + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public static void resetFile(String fileName) {
         if (fileName.indexOf('/') == -1) {
@@ -66,32 +88,39 @@ public class FileReaderSaver {
             fileName = "src/resource/data/" + fileName;
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName)) ) {
-            StringBuilder content = new StringBuilder();
-            String line;
-            int currentLine = 0;
+        try (RandomAccessFile file = new RandomAccessFile(fileName, "r")) {
+            String topLine = file.readLine(); // Read the top line
+            int currentLine = 1; // Initialize the line counter
 
-            while ((line = reader.readLine()) != null) {
-                currentLine++;
-                if (currentLine == lineNumber) {
-                    return line; // Return the specific line
+            if (topLine != null) {
+                try {
+                    currentLine = Integer.parseInt(topLine); // Try to parse the top line as an integer
+                } catch (NumberFormatException e) {
+                    // The top line is not a valid integer, indicating an empty file
+                    return "File is empty.";
                 }
             }
 
-            // If lineNumber is greater than the number of lines in the file, return an empty string.
-            if (lineNumber > currentLine) {
-                return "";
+            // Position to the start of the data
+            long position = 0;
+            String line;
+
+            while ((line = file.readLine()) != null) {
+                if (currentLine == lineNumber) {
+                    // Remove the delimiter and return the data
+                    return line.substring(0, line.lastIndexOf("~~~"));
+                }
+                position = file.getFilePointer();
+                currentLine++;
             }
 
             return "Line not found.";
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return "File not found.";
         } catch (IOException e) {
             e.printStackTrace();
             return "Error reading the file.";
         }
     }
+
     public static List<String> extractNamesWithNumber(String fileName, String targetNumber) {
         if (fileName.indexOf('/') == -1) {
             // No directory provided, use the default directory
