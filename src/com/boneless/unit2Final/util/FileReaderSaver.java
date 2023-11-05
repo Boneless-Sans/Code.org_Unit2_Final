@@ -88,29 +88,14 @@ public class FileReaderSaver {
             fileName = "src/resource/data/" + fileName;
         }
 
-        try (RandomAccessFile file = new RandomAccessFile(fileName, "r")) {
-            String topLine = file.readLine(); // Read the top line
-            int currentLine = 1; // Initialize the line counter
-
-            if (topLine != null) {
-                try {
-                    currentLine = Integer.parseInt(topLine); // Try to parse the top line as an integer
-                } catch (NumberFormatException e) {
-                    // The top line is not a valid integer, indicating an empty file
-                    return "File is empty.";
-                }
-            }
-
-            // Position to the start of the data
-            long position = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
+            int currentLine = 1;
 
-            while ((line = file.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 if (currentLine == lineNumber) {
-                    // Remove the delimiter and return the data
-                    return line.substring(0, line.lastIndexOf("~~~"));
+                    return line; // Return the entire line as plain text
                 }
-                position = file.getFilePointer();
                 currentLine++;
             }
 
@@ -121,13 +106,15 @@ public class FileReaderSaver {
         }
     }
 
-    public static List<String> extractNamesWithNumber(String fileName, String targetNumber) {
+    public static String extractNameWithNumber(String fileName, String targetNumber) {
+        if (fileName == null || targetNumber == null) {
+            return null; // Return null if no value is given for fileName or targetNumber
+        }
+
         if (fileName.indexOf('/') == -1) {
             // No directory provided, use the default directory
             fileName = "src/resource/data/" + fileName;
         }
-
-        List<String> matchingNames = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -137,13 +124,13 @@ public class FileReaderSaver {
                 Matcher matcher = pattern.matcher(line);
 
                 if (matcher.find()) {
-                    // If the line contains the target number, extract and add the name to the list
+                    // If the line contains the target number, extract and return the name
                     String[] parts = line.split("-"); // Assuming the name is separated by a hyphen
                     if (parts.length == 2) {
                         String name = parts[0].trim();
 
                         // Custom logic to remove unwanted characters
-                        matchingNames.add(name);
+                        return name;
                     }
                 }
             }
@@ -153,7 +140,8 @@ public class FileReaderSaver {
             e.printStackTrace();
         }
 
-        return matchingNames;
+        // Return null if the number is not found in the file or if other exceptions occur
+        return null;
     }
 
     public static boolean delete(String fileName) {

@@ -1,7 +1,27 @@
-7
-Filler 
-Brand: Apple - Device Type: MORE - Price: $1199.99
-Brand: Apple - Device Type: THISISTEXT - Price: $1199.99
-Brand: Apple - Device Type: MOE - Price: $1199.99
-"Brand: Apple - Device Type: more - Price: $1199.99"
-"Brand: Apple - Device Type: aaaaaaaaaaaaa - Price: $1199.99"
+Apple
+Google
+Samsung
+OnePlus
+- Apple Devices
+iPhone
+iPad
+Macbook
+- Apple iPhone Trims
+Standard
+Standard Plus
+Pro
+Pro Max
+-Apple iPad Trims
+iPad
+iPad Air
+iPad Pro
+-iPad Pro Sizes
+11"
+12.9"
+- Apple Storage
+128GBs
+250GBs
+500GBs
+1TB
+//to-do: add SKUs for easy finding (just make a random 6 digit number)
+!! Deprecated !! Too be used with a save function, cant do that with time frame

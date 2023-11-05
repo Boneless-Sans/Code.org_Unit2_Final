@@ -30,15 +30,16 @@ public class Main extends JFrame {
 //        mainMenu.add(submit);
 //        mainMenu.setVisible(true);
 //    }
+
+    //there is a code in place for making new device, brand, etc. due to time constraints, I cant finish them
     public static void main(String[] args) {
         boolean checkLoop = true;
         String brandChoice;
-        String typeChoice;
 
         Device customDevice = new Device("Phone", "Apple", 50);
         Scanner scan = new Scanner(System.in);
-        System.out.println("What Brand of Deivce Would You Like?");
-        System.out.println("Apple(a) " + "Google(g) " + "Samsung(s) + OnePlus(o)");
+        System.out.println("What Brand of Device Would You Like?");
+        System.out.println("Apple(a) " + "Google(g)");
         while (checkLoop) {
             brandChoice = scan.next();
             if (brandChoice.equalsIgnoreCase("a")) {
@@ -47,21 +48,18 @@ public class Main extends JFrame {
                 checkLoop = false;
                 customDevice.setType(appleDevice.chooseModel());
             } else if (brandChoice.equalsIgnoreCase("g")) {
+                Google googleDevice = new Google();
                 customDevice.setBrand("Google");
                 checkLoop = false;
-            } else if (brandChoice.equalsIgnoreCase("s")) {
-                customDevice.setBrand("Samsung");
-                checkLoop = false;
-            } else if (brandChoice.equalsIgnoreCase("o")) {
-                customDevice.setBrand("OnePlus");
-                checkLoop = false;
-            } else {
-                System.out.println("Invaild Choice");
-                System.out.println("What Brand of Deivce Would You Like?");
-                System.out.println("Apple(a) " + "Google(g) " + "Samsung(s) + OnePlus(o)");
+                customDevice.setType(googleDevice.chooseType());
+            }else {
+                System.out.println("Invalid Choice");
+                System.out.println("What Brand of Device Would You Like?");
+                System.out.println("Apple(a) " + "Google(g)");
             }
         }
     }
 }
 
 //Tech store, phones, tablets, laptops, desktops
+//Due to time constraints, JFrame will not be implemented, as well as saving data.
